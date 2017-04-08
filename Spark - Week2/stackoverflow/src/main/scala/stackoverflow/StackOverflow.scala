@@ -86,16 +86,10 @@ class StackOverflow extends Serializable {
 
     val answers = postings
       .filter(_.postingType == 2)
-      .filter(_.parentId.isDefined)
-      .map(posting => (posting.parentId, posting))
-
-    val answers_flattened = for ((Some(k), v) <- answers ) yield (k, v)
-
-    // Use one of the join operations to obtain an RDD[(QID, (Question, Answer))].
-    val joined = questions.join(answers_flattened)
-
-    // Obtain an RDD[(QID, Iterable[(Question, Answer)])].
-    joined.groupByKey()
+      .map(posting => (posting.parentId.getOrElse(0), posting))
+    
+    questions.join(answers)
+             .groupByKey()
   }
 
 
@@ -117,7 +111,9 @@ class StackOverflow extends Serializable {
     //val values = grouped.values.flatMap(_.toMap)
     //values.groupByKey().map(pair => (pair._1, answerHighScore(pair._2.toArray)))
 
-    grouped.flatMap(x => x._2).groupByKey().mapValues(v => answerHighScore(v.toArray))
+    grouped.values
+           .map(posting => (posting.head._1, posting.map(_._2)))
+           .map(posting => (posting._1, answerHighScore(posting._2.toArray)))
   }
 
 
