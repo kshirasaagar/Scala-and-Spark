@@ -4,7 +4,7 @@
 		module="stackoverflow-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20170408155200"
+		publication="20170408232306"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

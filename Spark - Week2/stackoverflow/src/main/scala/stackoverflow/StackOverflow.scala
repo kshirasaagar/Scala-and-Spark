@@ -14,8 +14,6 @@ object StackOverflow extends StackOverflow {
 
   @transient lazy val conf: SparkConf = new SparkConf().setMaster("local").setAppName("StackOverflow")
   @transient lazy val sc: SparkContext = new SparkContext(conf)
-  //sc.setLogLevel("WARN")
-  //System.setProperty("hadoop.home.dir", "c:\\winutils")
 
   /** Main function */
   def main(args: Array[String]): Unit = {
